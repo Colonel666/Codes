@@ -1,0 +1,333 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% PREAMBLE
+% \documentclass[handout,t]{beamer}            % HANDOUT
+% \documentclass[handout,notes=show,t]{beamer} % NOTES
+\documentclass[t]{beamer}       % SLIDES
+\usetheme{FAU}                  % FAU format
+\usepackage{beamer-tools}       % standard packages, definitions, macros
+
+\usepackage{bibentry}           % for single bibentries
+\nobibliography{}               % for showing bibentries outside references
+\usepackage{hyperref}           % hyperlinks (import last)
+
+% individual stuff
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\Prob}[1]{\mathbb{P}\left\{#1\right\}}
+\newcommand{\Probest}[1]{\hat{\mathbb{P}}\left\{#1\right\}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Configuration of Titlepage
+
+\title{\textbf{Werkzeuge und Infrastrukturen}}
+\subtitle{Wintersemester 2016/17}
+
+\author[Ahmed Albawabiji]{Ahmed Albawabiji}
+
+\institute[]{
+  Professur für Korpuslinguistik\\
+  Studiengang Linguistische Informatik\\
+  Friedrich-Alexander-Universität Erlangen-Nürnberg\\
+  \secondary{\url{ahmed.albawabiji@fau.de}}
+}
+\date{Erlangen, 20.12.2016}              % comment for today's date
+\setbeamertemplate{navigation symbols}{} % remove navigation symbols
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Header
+
+\begin{document}
+\frame{\titlepage}              % create titlepage
+\hideLogo                       % don't show the logo on following pages
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Table of Contents
+
+\frame[plain]{\frametitle{Inhaltsverzeichnis}\tableofcontents}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Actual Frames
+
+
+\section{Einführung}
+\subsection{Pipelines}
+\begin{frame}{Abstakt:Was sind Pipelines?}
+
+Es ist die Aktion von Serialisierung.\\
+\bigskip
+Eine Gegenaktion ist die Deserialisierung oder Parallelisation.\\
+\bigskip
+
+Es ist eine Methode, die Ausgabe eines Prozesses mit der Ausgabe eines anderen Prozesses zu verbinden.\\
+\end{frame}
+
+
+\begin{frame}{Motivation}
+Früher sah es so aus:\\
+%von hier
+\$ \url{python get_some_data.py}\\
+\$ \url{python clean_some_data.py}\\
+\$ \url{python join_other_data.py}\\
+\$ \url{python do_stuff_with_data.py}\\
+\bigskip
+funktioniert gut und sogar schnell!\\
+\textbf{Problem beim Weiterleiten!}\\
+Programmierer(B):\\
+Es hat nicht funktioniert...!?\\
+Programmierer (A):\\
+Hast du den die Daten schon gefiltert, bevor du sie miteinanderverbinden!?\\
+\end{frame}
+
+\begin{frame}{Eine mögliche Lösung:}
+
+
+\url{do_everything.py script:}\\
+\url{if __name__== '__main__':}\\
+\bigskip
+\textbf{Darunter schreibe ich alle zum Laufen gewollten Methoden
+Und dann führe ich alles mit einem Befehl aus!}\\
+\bigskip
+%$     get_some_data()$\\
+%$     clean_some_data()$\\
+%$     join_other_data()$\\
+%$     do_stuff_with_data()$\\
+$python do_everything.py$\\
+
+\end{frame}
+
+
+
+
+
+
+\begin{frame}{Warum Pipelines?}
+\begin{itemize}
+\item Unsere Daten leicht bearbeiten und die Fehler besser auflösen.
+\item Unsere Arbeit ganz ordentlich organizieren.
+\item Mehr Kollaborationsmoeglichkeit, besser Codeverständnis zwischen den Programmierern und/oder den verschiedenen Betriebsystemen oder Editors. (Das Abschicken ist nicht immer sicher! ).
+\item Daten von irgendwo holen, etwas damit machen und dann schicken sie wo anderes ab.
+
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{Was sind Pipelines?}
+
+\begin{itemize}
+\item Es ist eine Methode, die die Ausgabe eines Prozesses mit der Ausgabe eines anderen Prozesses miteinanderverbindet.
+\item  Pipes sind alle wichtigen Schritte oder Prozesse zur Vorbereitung oder /und Verarbeitung unsere Daten.
+\item Es ist die Umformen von prototype zur Produktion.
+\item So wird die Ausgabe einesProgramms als die Eingabe eines anderen Programm verwendet um am Ende etwas komplizierteres draus herauszubringen.
+\item Data pipelines sind überall.
+\item Nützlich von data als Ereignis(Produktion) zu denken!
+\item Wir schreiben Programme die zusammen ein grosseres Programm machen.
+\end{itemize}
+\end{frame}
+
+
+
+\begin{frame}{Bestandteile einer Pipe:}
+ 
+\begin{itemize}
+\item Standard input(stin) :
+Datei, von  der wir Information bekommen, um damit bearbeiten zu können.
+
+\item Standard output(stout) :
+Datei, von  der wir Information bekommen, um damit bearbeiten zu können.
+
+\item Standard error(sterr)  :
+!! OOPS! Etwas ging schief! Bitte schön diese Fehlermeldung als Ausgabe !
+stdout(1) processes (A) verbinden wir mit dem stdin(0) Prozesses (B)
+durch den Bar $|$     (ist ja trivial)\\
+\textbf{Command(A) $|$ Command (B)}\\
+
+Deswegen sind sie auch  FIFO gennant(first in first out) 
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\begin{figure}
+\includegraphics[width=\textwidth]{pipe.png}
+\end{figure}
+\end{frame}
+
+
+
+
+\begin{frame}{Arten von Pipes}
+\begin{figure}
+\includegraphics[width=\textwidth]{Bier-pipe.png}
+\end{figure}
+\end{frame}
+
+
+
+\begin{frame}{Arten von Pipes}
+\begin{figure}
+\includegraphics[width=\textwidth]{bidierekt.png}
+\end{figure}
+\end{frame}
+
+
+
+
+
+%\begin{frame}
+%Beispiel(Pipelines) und vllt Arten von Pipelines erkaeren!
+%\end{frame}
+\section{Hauptteil}
+
+
+%%%%%%LUIGI%%%%%%
+\subsection{Luigi}
+
+
+\begin{frame}
+\begin{figure}
+\includegraphics[width=\textwidth]{luigi.png}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{kleine Motivation}
+Führen wir zurück zu unserer Motivation von Pipelines:\\
+Aber was wenn es Fehler dran gäben, was macht man!\\
+Man könnte das mit (try : und except) lösen!\\
+Danach werden  wir einen Weihnachtsbaum haben! Umständlich!\\
+Da könnten uns Packages wie Luigi, Airflow, Pinball oder auch andere retten.\\
+\url{https://github.com/pditommaso/awesome-pipeline}
+\end{frame}
+
+
+\begin{frame}{Was ist Luigi}
+\begin{itemize}
+\item Luigi ist ein python package, das dabei hilft kompezierte Pipelines zu bilden.
+\item Wurde vom Spotify entwickelt, um ihnen thousande von Jobs, die sie täglich  in einer bestimmten Reihenfolge führen,  ermöglicht zu bewältigen.
+\item Es ist der Klebstoff, der die Prozesse miteinander zusammenbringt.
+\item Abhängigkeit ist durch input und Output identifiziert. D.h. TaskB ist von TaskA abhängig .. bedeutet, Output von TaskA ist das Input (requires)von TaskB.
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}{ Vorteile von Luigi}
+\begin{itemize}
+\item Definieren von einander abhängige Tasks, die lange Zeit zum Laufen bruachen.
+\item Tasks verketten, automaten, mit den daraus möglichen entstandenen Fehlern umgehen, die Reihenfolge sehr einfach ändern. 
+ Tasks könnten alles sein, Daten von Datenbanken holen oder zu den Datenbanken schicken, maschinale lernen oder was anderes.
+\item weiterzumachen von dem letzten laufenden Schritt.(muss nicht nochmal von Anfang)\\
+\item Workflow management, Visualization(running, penning, done Tasks!)(dafür braucht man \$ luigid).
+Aber:\\
+Ausführung ist von der Reihenfolge abhängig.\\
+keine vorhandenen Reihenfolgen!\\
+Visualizahtion könnte besser sein!\\
+
+\end{itemize}
+\begin{center}
+\$pip install luigi
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Magie von Luigi}
+\begin{figure}
+\includegraphics[width=\textwidth]{fetch.png}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}{ Drei Hauptfunktionen:}
+Task: Ein Teil der Bearbeitung! …. Erweiterung von der Klasse luigi.Task.\\
+Target: Output eines Tasks..kann alles sein! Datei erstellen, modifizieren oder sostiges!\\
+\begin{itemize}
+\item def requires(self):\\
+pass \# list of dependencies
+\item def output(self):\\
+pass \# task output
+\item def run(self):\\
+pass \# tasks logik.
+\end{itemize}
+
+Für ein Task sind die drei erforderlich … wir könnten aber unsere Kette  vergrößern.\\
+Beispiele dazu..
+\end{frame}
+\begin{frame}
+\begin{figure}
+\includegraphics[width=\textwidth]{tasks.png}
+\end{figure}
+\end{frame}
+
+%%%%%%%Airflow%%%%%
+\subsection{Airflow}
+\begin{frame}{Airflow}
+\begin{itemize}
+\item Funktioniert mit Python, my SQL, Bash und auch anderen.\\
+\item Seit 2015.
+\item DAGs anstatt Piplines.
+Directed Acyclic Graph:
+Eine Sammlung von den Tasks, die wir zum Laufen bringen wollen!
+In einer Art und Weise, die die Relationen und Abhängigkeit zwichen denen spiegelt.\\
+DAGs werden in einer Datei in Airflow's Datei, die $ DAG_FOLDER$ heisst.
+\item Beim ersten Lauf erstellt das Programm  airflow.cfg und da kann man Airflow configuration edieren.
+Beispiel Task A sammelt Daten , B analisiert , C schickt Emails.\\
+\$pip install airflow\\
+Strukturierter Baum:
+\url{https://airflow.incubator.apache.org/ui.html}
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Ein DAG}
+\begin{figure}
+\includegraphics[width=\textwidth]{G.png}
+\end{figure}
+\end{frame}
+
+%%%%%Pinball%%%%%%
+\subsection{Pinball}
+
+
+\begin{frame}
+\begin{itemize}
+\item Auch Python Package.
+\item Modifizierter PunktWorkflow manager and scheduler.
+\item Werden parent-job und child-Job benutzt, um die Abhängigkeit zu bilden.
+\item Meldungen durch die E-Mail.
+\$ pip install pinball
+\end{itemize}
+\end{frame}
+
+
+
+
+
+
+\section{Zusammenfassung und Vergleich}
+\begin{frame}
+
+Luigi Vs airflow Vs pinball\\
+\bigskip
+\url{https://www.michaelcho.me/article/data-pipelines-airflow-vs-pinball-vs-luigi}\\
+
+%$http://bytepawn.com/luigi-airflow-pinball.html#luigi-airflow-pinball$\\
+
+\end{frame}
+
+
+
+%%%%%%Literaturverzeichnis%%%%%%%%%%%%%%%%%%%%
+
+\section{Literaturverzeichnis}
+\begin{frame}
+Wachsmuth,Henning: Text Analyse und Pipelines,Springer,2015.\\
+\url{https://github.com/pditommaso/awesome-pipeline}\\
+\url{http://bionics.it/posts/luigi-tutorial}\\
+\url{https://www.michaelcho.me/article/data-pipelines-airflow-vs-pinball-vs-luigi}\\
+%\url{http://bytepawn.com/luigi-airflow-pinball.html#luigi-airflow-pinball}\\
+\url{http://www.python-kurs.eu/pipes.php}
+\end{frame}
+
+
+\end{document}
